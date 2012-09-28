@@ -1,0 +1,16 @@
+<resources>
+
+    <string name="app_name">resource manager</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="menu_settings">Settings</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="start_video">start</string>
+    <string name="stop_video">stop</string>
+    <string name="record_video_label">Record Video</string>
+    <string name="picture_label">Picture</string>
+    <string name="take_picture">Take</string>
+    <string name="interrupt_label">Interrupt</string>
+    <string name="end_resource">End</string>
+    <string name="camera_switch">Camera</string>
+
+</resources>
