@@ -9,10 +9,27 @@ public class ResourceManager implements IConsumptionObs{
 	public static final String[] RESOURCES = {"CAMERA","QR"};
 	public static final String[] R1_ACTIONS = {"TAKE_PICTURE","START_RECORDING","STOP_RECORDING"};
 	private MainActivity mainActivity;
+	private IUserManager userManager;
 	
-	public void init(MainActivity _mainActivity)
+	public String[] getResourcesList()//para User manager
 	{
+		String[] resources2 = new String[resources.length];
+		for(int i =0;i<resources.length;i++)
+		{
+			resources2[i] = resources[i].toString();
+		}
+		return resources2;
+	}
+	
+	public ResourceManager(MainActivity _mainActivity, IUserManager _userManager)
+	{
+		this.userManager = _userManager;
 		this.mainActivity = _mainActivity;
+		init();
+	}
+	
+	public void init()
+	{
 		persistencia = new Persistencia();
 		this.user_id = 1;
 		resources = new Resource[RESOURCES.length];
@@ -68,9 +85,9 @@ public class ResourceManager implements IConsumptionObs{
 		}
 	}
 	
-	public void consumptionFinished(int resource_id, String path) {
-		observer.resourceFinished(resource_id, path);
-		persistencia.write(user_id,"resource:"+RESOURCES[resource_id]+" FINISHED CONSUMPTION (path - "+path+")");
+	public void consumptionFinished(int resource_id, Object object) {
+		observer.resourceFinished(resource_id, object);
+		persistencia.write(user_id,"resource:"+RESOURCES[resource_id]+" FINISHED CONSUMPTION (object - "+object.toString()+")");
 	}
 
 	public void consumptionFailed(int resource_id, String error) {
@@ -82,5 +99,4 @@ public class ResourceManager implements IConsumptionObs{
 		observer.resourceInterrupted(resource_id, error);
 		persistencia.write(user_id,"resource:"+RESOURCES[resource_id]+" INTERUPTED CONSUMPTION error-"+error);
 	}
-	
 }

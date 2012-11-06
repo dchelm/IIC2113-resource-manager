@@ -4,13 +4,13 @@ public class ApplicationManager implements IAppObs{
 
 	private ResourceManager resourceManager;
 	private MainActivity mainActivity;
+	private UserManager userManager;
 	
 	public void init(MainActivity _mainActivity)
 	{
 		this.mainActivity = _mainActivity;
-		this.resourceManager = new ResourceManager();
+		this.resourceManager = new ResourceManager(this.mainActivity,(IUserManager)userManager);
 		this.resourceManager.setAppObserver((IAppObs)this);
-		this.resourceManager.init(this.mainActivity);
 	}
 
 	public void takePicture()
@@ -33,8 +33,8 @@ public class ApplicationManager implements IAppObs{
 		resourceManager.endResources();
 	}
 	
-	public void resourceFinished(int resource_id, String path) {
-		System.out.println("Application Manager - Resource:"+ResourceManager.RESOURCES[resource_id]+" FINISHED - (path:"+path+")");		
+	public void resourceFinished(int resource_id, Object object) {
+		System.out.println("Application Manager - Resource:"+ResourceManager.RESOURCES[resource_id]+" FINISHED - (object:"+object.toString()+")");		
 	}
 
 	public void resourceFailed(int resource_id, String error) {
