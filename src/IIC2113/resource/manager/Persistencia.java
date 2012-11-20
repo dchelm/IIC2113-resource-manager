@@ -1,9 +1,8 @@
 package IIC2113.resource.manager;
 
-public class Persistencia {
-	public void write(int id, String message)
-	{
-		System.out.println("User ["+id+"] - "+message);
+public class Persistencia implements IPersistencia{
+	public void write(int usuario_id, int dispositivo, String mensaje) {
+		System.out.println("User ["+usuario_id+"] - Device ["+dispositivo+"] - Message - "+mensaje);
 	}
 	
 }

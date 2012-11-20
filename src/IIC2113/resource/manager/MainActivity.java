@@ -1,11 +1,13 @@
 package IIC2113.resource.manager;
 
 import android.app.Activity;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageButton;
 
 public class MainActivity extends Activity{
 	
@@ -16,6 +18,21 @@ public class MainActivity extends Activity{
 		appManager.endResources();
 		EditText editText = (EditText) findViewById(R.id.editText1);
 		editText.setText("Resource Ended");
+	}
+	
+	public void cameraChange(View view)
+	{
+		CheckBox checkBox = (CheckBox) findViewById(R.id.checkBox1);
+		ImageButton img = (ImageButton) findViewById(R.id.imageButton1);
+		if(checkBox.isChecked())
+		{
+			img.setBackgroundColor(Color.GREEN);
+		}
+		else
+		{
+			img.setBackgroundColor(Color.BLACK);
+			appManager.endResources();
+		}
 	}
 	
 	/** Called when the user clicks the Send button */

@@ -4,8 +4,8 @@ public class ResourceManager implements IConsumptionObs{
 
 	private IAppObs observer;
 	private Resource[] resources;
-	private Persistencia persistencia;
-	private int user_id;
+	private IPersistencia persistencia;
+	private int user_id,device_id;
 	public static final String[] RESOURCES = {"CAMERA","QR"};
 	public static final String[] R1_ACTIONS = {"TAKE_PICTURE","START_RECORDING","STOP_RECORDING"};
 	private MainActivity mainActivity;
@@ -32,11 +32,15 @@ public class ResourceManager implements IConsumptionObs{
 	{
 		this.userManager = _userManager;
 		init();
+    }
+
+	public void setDeviceId(int _device_id)
+	{
+		this.device_id = _device_id;
 	}
 	
 	public void init()
 	{
-		persistencia = new Persistencia();
 		this.user_id = 1;
 		resources = new Resource[RESOURCES.length];
 		for(int i = 0;i<RESOURCES.length;i++)
@@ -49,6 +53,11 @@ public class ResourceManager implements IConsumptionObs{
 		}
 	}
 	
+	public void setPersistencia(IPersistencia _persistencia)
+	{
+		this.persistencia = _persistencia;
+	}
+	
 	public void setAppObserver(IAppObs _observer)
 	{
 		this.observer = _observer;
@@ -57,29 +66,29 @@ public class ResourceManager implements IConsumptionObs{
 	public boolean sendResourceAvailability(int resource_id)
 	{
 		boolean available = resources[resource_id].isAvailable(); 
-		persistencia.write(user_id,"resource:"+RESOURCES[resource_id]+", availability:"+available);
+		persistencia.write(user_id,device_id,"resource:"+RESOURCES[resource_id]+", availability:"+available);
 		return available;
 	}
 	
 	public int sendResourceStatus(int id)
 	{
 		int status = resources[id].getStatus();
-		persistencia.write(user_id, "resource:"+RESOURCES[id]+", status:"+Resource.RESOURCES[status]);
+		persistencia.write(user_id,device_id, "resource:"+RESOURCES[id]+", status:"+Resource.RESOURCES[status]);
 		return status;
 	}
 	
 	public boolean resourceAction(int resource_id,int action_id,String[] param)
 	{
 		boolean response = resources[resource_id].recieveAction(action_id, param);
-		persistencia.write(user_id,"resource:"+RESOURCES[resource_id]+" , action:"+ResourceManager.R1_ACTIONS[action_id]);
-		persistencia.write(user_id, "resource:"+RESOURCES[resource_id]+", status:"+Resource.RESOURCES[resources[resource_id].getStatus()]);
+		persistencia.write(user_id,device_id,"resource:"+RESOURCES[resource_id]+" , action:"+ResourceManager.R1_ACTIONS[action_id]);
+		persistencia.write(user_id,device_id, "resource:"+RESOURCES[resource_id]+", status:"+Resource.RESOURCES[resources[resource_id].getStatus()]);
 		return response;
 	}
 	
 	public void endResource(int resource_id)
 	{
 		resources[resource_id].cancelConsumption();
-		persistencia.write(user_id,"resource:"+RESOURCES[resource_id]+", RESOURCE ENDED");
+		persistencia.write(user_id,device_id,"resource:"+RESOURCES[resource_id]+", RESOURCE ENDED");
 	}
 	
 	public void endResources()
@@ -87,22 +96,22 @@ public class ResourceManager implements IConsumptionObs{
 		for(int i = 0;i<resources.length;i++)
 		{
 			resources[i].cancelConsumption();	
-			persistencia.write(user_id,"resource:"+RESOURCES[i]+", RESOURCES ENDED");
+			persistencia.write(user_id,device_id,"resource:"+RESOURCES[i]+", RESOURCES ENDED");
 		}
 	}
 	
 	public void consumptionFinished(int resource_id, Object object) {
 		observer.resourceFinished(resource_id, object);
-		persistencia.write(user_id,"resource:"+RESOURCES[resource_id]+" FINISHED CONSUMPTION (object - "+object.toString()+")");
+		persistencia.write(user_id,device_id,"resource:"+RESOURCES[resource_id]+" FINISHED CONSUMPTION (object - "+object.toString()+")");
 	}
 
 	public void consumptionFailed(int resource_id, String error) {
 		observer.resourceFailed(resource_id, error);
-		persistencia.write(user_id,"resource:"+RESOURCES[resource_id]+" FAILED CONSUMPTION error-"+error);
+		persistencia.write(user_id,device_id,"resource:"+RESOURCES[resource_id]+" FAILED CONSUMPTION error-"+error);
 	}
 
 	public void consumptionInterrupted(int resource_id, String error) {
 		observer.resourceInterrupted(resource_id, error);
-		persistencia.write(user_id,"resource:"+RESOURCES[resource_id]+" INTERUPTED CONSUMPTION error-"+error);
+		persistencia.write(user_id,device_id,"resource:"+RESOURCES[resource_id]+" INTERUPTED CONSUMPTION error-"+error);
 	}
 }
