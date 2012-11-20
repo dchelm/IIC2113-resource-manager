@@ -28,6 +28,12 @@ public class ResourceManager implements IConsumptionObs{
 		init();
 	}
 	
+	public ResourceManager(IUserManager _userManager)
+	{
+		this.userManager = _userManager;
+		init();
+	}
+	
 	public void init()
 	{
 		persistencia = new Persistencia();
