@@ -1,18 +1,19 @@
 package IIC2113.resource.manager;
 
+import IIC2113.resource.manager.R.string;
+
 public class ApplicationManager implements IAppObs{
 
 	private ResourceManager resourceManager;
-	private MainActivity mainActivity;
 	private UserManager userManager;
 	private Persistencia persistencia;
 	private int device_id = 1337;
 	
-	public void init(MainActivity _mainActivity)
+	
+	public void init()
 	{
 		this.persistencia = new Persistencia();
-		this.mainActivity = _mainActivity;
-		this.resourceManager = new ResourceManager(this.mainActivity,(IUserManager)userManager);
+		this.resourceManager = new ResourceManager((IUserManager)userManager);
 		this.resourceManager.setAppObserver((IAppObs)this);
 		this.resourceManager.setPersistencia((IPersistencia)this.persistencia);
 		this.resourceManager.setDeviceId(device_id);
